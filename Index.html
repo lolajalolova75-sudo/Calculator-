@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>iOS Calculator</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body { background-color: #000; font-family: -apple-system, sans-serif; display: flex; flex-direction: column; justify-content: flex-end; height: 100vh; overflow: hidden; }
+    .display { color: #fff; font-size: 80px; text-align: right; padding: 20px 30px; }
+    .buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 20px; }
+    button { border: none; height: 75px; border-radius: 50%; font-size: 30px; cursor: pointer; }
+    button:active { opacity: 0.7; }
+    .btn-gray { background: #a5a5a5; color: #000; }
+    .btn-dark { background: #333; color: #fff; }
+    .btn-orange { background: #ff9f0a; color: #fff; }
+    .zero { grid-column: span 2; border-radius: 40px; text-align: left; padding-left: 30px; }
+  </style>
+</head>
+<body>
+  <div class="display" id="display">0</div>
+  <div class="buttons">
+    <button class="btn-gray" onclick="clearD()">AC</button>
+    <button class="btn-gray" onclick="toggleS()">+/-</button>
+    <button class="btn-gray" onclick="addOp('%')">%</button>
+    <button class="btn-orange" onclick="addOp('/')">÷</button>
+    <button class="btn-dark" onclick="addN('7')">7</button>
+    <button class="btn-dark" onclick="addN('8')">8</button>
+    <button class="btn-dark" onclick="addN('9')">9</button>
+    <button class="btn-orange" onclick="addOp('*')">×</button>
+    <button class="btn-dark" onclick="addN('4')">4</button>
+    <button class="btn-dark" onclick="addN('5')">5</button>
+    <button class="btn-dark" onclick="addN('6')">6</button>
+    <button class="btn-orange" onclick="addOp('-')">-</button>
+    <button class="btn-dark" onclick="addN('1')">1</button>
+    <button class="btn-dark" onclick="addN('2')">2</button>
+    <button class="btn-dark" onclick="addN('3')">3</button>
+    <button class="btn-orange" onclick="addOp('+')">+</button>
+    <button class="btn-dark zero" onclick="addN('0')">0</button>
+    <button class="btn-dark" onclick="addN('.')">.</button>
+    <button class="btn-orange" onclick="calc()">=</button>
+  </div>
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+    let d = document.getElementById('display'), e = '';
+    function u() { d.innerText = e || '0'; }
+    function addN(n) { if(e==='0'&&n!=='.')e=''; e+=n; u(); }
+    function addOp(o) { if(e!=='') { e+=' '+o+' '; u(); } }
+    function clearD() { e=''; u(); }
+    function toggleS() { if(e) { e = e.startsWith('-') ? e.slice(1) : '-'+e; u(); } }
+    function calc() {
+      try { e = eval(e.replace(/÷/g, '/').replace(/×/g, '*')).toString(); u(); }
+      catch { u('Error'); e=''; }
+    }
+  </script>
+</body>
+  </html>
+  
